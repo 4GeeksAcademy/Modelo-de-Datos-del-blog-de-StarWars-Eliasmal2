@@ -1,7 +1,7 @@
 
 from typing import List
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, DateTime, String, Boolean, ForeignKey, Table
+from sqlalchemy import Column, DateTime, String, ForeignKey, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 db = SQLAlchemy()
@@ -16,15 +16,15 @@ class User(db.Model):
     email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
     password: Mapped[str] = mapped_column(nullable=False)
 
-    fav_planet: Mapped[List["Planets"]] = relationship(secondary='favorites_character', back_populates='user_favorites')
-    fav_character: Mapped[List["Character"]] = relationship(secondary='favorites_planet', back_populates='user_favorites')
+    fav_planet: Mapped[List["Planet"]] = relationship(secondary='favorites_planet', back_populates='user_favorites')
+    fav_character: Mapped[List["Character"]] = relationship(secondary='favorites_character', back_populates='user_favorites')
 
-def serialize(self):
+    def serialize(self):
         return {
             "id": self.id,
             "email": self.email,
             'name': self.name,
-            'suscription_date': self.suscription_date
+            'date_created': self.date_created
         }
 
 class Planet(db.Model):
